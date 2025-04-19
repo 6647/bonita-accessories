@@ -451,7 +451,7 @@ const products = [
     },
 ];
 // WhatsApp contact number
-const whatsappNumber = "966501234567";
+const whatsappNumber = "+201008263915";
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function () {
@@ -497,7 +497,7 @@ function renderProducts(productsToRender) {
                     <h3 class="product-description">${product.description}</h3>
                     <div class="product-price">${product.price}</div>
                     <button class="whatsapp-btn" onclick="contactAboutProduct(${product.id})">
-                        <span class="whatsapp-icon">📱</span> Order via WhatsApp
+                        <span class="whatsapp-icon"></span> اطلب من واتساب
                     </button>
                 </div>
             </div>
@@ -540,7 +540,7 @@ function contactAboutProduct(productId) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
 
-    const message = `Hello Bonita Accessories! I'm interested in purchasing your ${product.title} (${product.price}). Please provide more details.`;
+    const message = `اهلا فريق Bonita Acceesroies, انا مهتم بالمنتج ${product.title}  ${product.id} (${product.price}).`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
