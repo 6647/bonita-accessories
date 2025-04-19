@@ -467,7 +467,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         renderProducts(products);
         setupFilterButtons();
-    }, 100);
+    }, 2500);
 
 });
 
