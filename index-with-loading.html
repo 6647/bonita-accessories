@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bonita Accessories - Elegant Jewelry Collection</title>
+    <style>
+        :root {
+            --primary-dark: #47003c;
+            --primary: #77176e;
+            --primary-light: #c83fa9;
+            --secondary: #aa4d84;
+            --accent: #f3b0dc;
+            --white: #ffffff;
+            --light-gray: #f8f8f8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--primary-dark);
+            overflow-x: hidden;
+        }
+
+        /* Splash Screen Styles */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .splash-logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--white);
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards 0.3s;
+        }
+
+        .splash-tagline {
+            font-size: 1rem;
+            color: var(--accent);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards 0.5s;
+            margin-bottom: 2rem;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s ease-in-out infinite;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards 0.7s, spin 1s ease-in-out infinite 0.7s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Main Content Styles (initially hidden) */
+        .main-content {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: var(--white);
+            padding: 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.8rem;
+        }
+
+        .contact-channels {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 0.8rem;
+        }
+
+        .contact-channel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--white);
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-channel:hover {
+            transform: translateY(-3px);
+            opacity: 0.9;
+        }
+
+        .channel-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+            border: 1.5px solid var(--white);
+            border-radius: 50%;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-channel:hover .channel-icon {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Rest of your existing CSS remains the same */
+        .filter-container {
+            background-color: var(--white);
+            padding: 1rem;
+            position: sticky;
+            top: 180px;
+            z-index: 90;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-buttons {
+            display: flex;
+            overflow-x: auto;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .filter-buttons::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .filter-buttons::-webkit-scrollbar-thumb {
+            background-color: var(--primary-light);
+            border-radius: 2px;
+        }
+
+        .filter-btn {
+            background-color: var(--light-gray);
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .filter-btn:hover {
+            background-color: var(--primary-light);
+            color: var(--white);
+        }
+
+        .products-container {
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .product-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 0.8rem;
+        }
+
+        .product-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--primary-dark);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .whatsapp-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .whatsapp-icon {
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .no-products {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary);
+        }
+
+        footer {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (min-width: 768px) {
+            .products-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-logo">Bonita Accessories</div>
+        <div class="splash-tagline">Elegant Jewelry for Every Occasion</div>
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Main Content (initially hidden) -->
+    <div class="main-content" id="mainContent">
+        <header>
+            <div class="logo">Bonita Accessories</div>
+            <div class="tagline">Elegant Jewelry for Every Occasion</div>
+
+            <div class="contact-channels">
+                <a href="https://instagram.com/yourusername" target="_blank" class="contact-channel">
+                    <span class="channel-icon">📸</span>
+                    <span>Instagram</span>
+                </a>
+                <a href="https://facebook.com/yourpagename" target="_blank" class="contact-channel">
+                    <span class="channel-icon">f</span>
+                    <span>Facebook</span>
+                </a>
+                <a href="https://wa.me/966501234567" target="_blank" class="contact-channel">
+                    <span class="channel-icon">✆</span>
+                    <span>WhatsApp</span>
+                </a>
+            </div>
+        </header>
+
+        <div class="filter-container">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all">All Products</button>
+                <button class="filter-btn" data-category="earrings">Earrings</button>
+                <button class="filter-btn" data-category="rings">Rings</button>
+                <button class="filter-btn" data-category="bracelets">Bracelets</button>
+                <button class="filter-btn" data-category="necklaces">Necklaces</button>
+                <button class="filter-btn" data-category="sets">Sets</button>
+            </div>
+        </div>
+
+        <div class="products-container" id="productsContainer">
+            <!-- Products will be loaded here -->
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-text">
+                © 2023 Bonita Accessories. All rights reserved.
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Sample product data
+        const products = [
+            {
+                id: 1,
+                title: "Golden Hoop Earrings",
+                price: "45 SAR",
+                category: "earrings",
+                image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            },
+            {
+                id: 2,
+                title: "Silver Statement Ring",
+                price: "65 SAR",
+                category: "rings",
+                image: "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            },
+            {
+                id: 3,
+                title: "Pearl Bracelet Set",
+                price: "85 SAR",
+                category: "bracelets",
+                image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            },
+            {
+                id: 4,
+                title: "Diamond Stud Earrings",
+                price: "120 SAR",
+                category: "earrings",
+                image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            },
+            {
+                id: 5,
+                title: "Gold Plated Necklace",
+                price: "95 SAR",
+                category: "necklaces",
+                image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            },
+            {
+                id: 6,
+                title: "Bridal Jewelry Set",
+                price: "250 SAR",
+                category: "sets",
+                image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            },
+            {
+                id: 7,
+                title: "Minimalist Silver Ring",
+                price: "55 SAR",
+                category: "rings",
+                image: "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            },
+            {
+                id: 8,
+                title: "Charm Bracelet",
+                price: "75 SAR",
+                category: "bracelets",
+                image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            }
+        ];
+
+        // WhatsApp contact number
+        const whatsappNumber = "966501234567";
+
+        // Initialize the page after splash screen
+        document.addEventListener('DOMContentLoaded', function () {
+            // Show splash screen for 3 seconds, then show main content
+            setTimeout(function () {
+                const splashScreen = document.getElementById('splashScreen');
+                const mainContent = document.getElementById('mainContent');
+
+                // Fade out splash screen
+                splashScreen.style.opacity = '0';
+                splashScreen.style.visibility = 'hidden';
+
+                // Fade in main content
+                mainContent.style.opacity = '1';
+
+                // Load products and setup filters
+                renderProducts(products);
+                setupFilterButtons();
+            }, 3000); // 3 second splash screen
+        });
+
+        // Render products to the page
+        function renderProducts(productsToRender) {
+            const productsContainer = document.getElementById('productsContainer');
+
+            if (productsToRender.length === 0) {
+                productsContainer.innerHTML = '<div class="no-products">No products found in this category.</div>';
+                return;
+            }
+
+            let html = '';
+
+            productsToRender.forEach(product => {
+                html += `
+                    <div class="product-card" data-category="${product.category}">
+                        <img src="${product.image}" alt="${product.title}" class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-title">${product.title}</h3>
+                            <div class="product-price">${product.price}</div>
+                            <button class="whatsapp-btn" onclick="contactAboutProduct(${product.id})">
+                                <span class="whatsapp-icon">📱</span> Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            productsContainer.innerHTML = html;
+        }
+
+        // Set up filter button functionality
+        function setupFilterButtons() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Filter products
+                    const category = this.dataset.category;
+                    filterProducts(category);
+                });
+            });
+        }
+
+        // Filter products by category
+        function filterProducts(category) {
+            if (category === 'all') {
+                renderProducts(products);
+                return;
+            }
+
+            const filteredProducts = products.filter(product => product.category === category);
+            renderProducts(filteredProducts);
+        }
+
+        // Handle WhatsApp contact for a product
+        function contactAboutProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const message = `Hello Bonita Accessories! I'm interested in purchasing your ${product.title} (${product.price}). Please provide more details.`;
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</body>
+
+</html>
