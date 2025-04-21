@@ -467,7 +467,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         renderProducts(products);
         setupFilterButtons();
-    }, 2500);
+    }, 500);
 
 });
 
@@ -493,8 +493,9 @@ function renderProducts(productsToRender) {
                 </div>
                 <div class="product-info">
                     <h3 class="product-title">${product.title}</h3>
-                    <p class="product-title">منتج رقم ${product.id}</hp>
                     <h3 class="product-description">${product.description}</h3>
+                    <p class="product-description">[منتج رقم ${product.id}]</p>
+                    <hr style="width:50%; margin:auto;"/>
                     <div class="product-price">${product.price}</div>
                     <button class="whatsapp-btn" onclick="contactAboutProduct(${product.id})">
                         <span class="whatsapp-icon"></span> اطلب من واتساب
